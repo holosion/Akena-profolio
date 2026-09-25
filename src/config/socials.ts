@@ -5,22 +5,23 @@
 export const socials = {
   githubProfile: 'https://github.com/holosion',
   linkedin: '',
-  x: '',
-  email: '',
+  x: 'https://x.com/AkenaJonat2240',
+  email: 'akenajonathan24@gmail.com',
+  instagram: 'https://instagram.com/holo.sion',
 } as const;
 
 export const projectLinks = {
   iles: {
-    github: '',
+    github: 'https://github.com/holosion/FINAL_ILES',
     demo: 'https://final-iles.vercel.app/',
   },
   events: {
-    github: '',
+    github: 'https://github.com/holosion/event-booking-system',
     demo: 'https://event-booking-system-szz4.onrender.com/',
   },
   lumora: {
-    github: '',
-    demo: 'https://guardiangass.yvonnekimera2.workers.dev/auth/signup',
+    github: 'https://github.com/holosion/embedded_systems',
+    demo: 'https://guardiangass.yvonnekimera2.workers.dev/dashboard',
   },
 } as const;
 
