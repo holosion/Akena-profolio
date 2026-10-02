@@ -134,7 +134,7 @@ export default function Threads({
     const MAX_RENDER_DIM = 1400;
 
     function resize() {
-      const { clientWidth, clientHeight } = container;
+      const { clientWidth, clientHeight } = container!;
       const baseDpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const longestSide = Math.max(clientWidth, clientHeight) * baseDpr;
       const dpr = longestSide > MAX_RENDER_DIM ? (baseDpr * MAX_RENDER_DIM) / longestSide : baseDpr;
@@ -152,14 +152,14 @@ export default function Threads({
     const currentMouse = [0.5, 0.5];
     let targetMouse = [0.5, 0.5];
     function handleMouseMove(e: MouseEvent) {
-      const rect = container.getBoundingClientRect();
+      const rect = container!.getBoundingClientRect();
       targetMouse = [(e.clientX - rect.left) / rect.width, 1.0 - (e.clientY - rect.top) / rect.height];
     }
     function handleMouseLeave() {
       targetMouse = [0.5, 0.5];
     }
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    container!.addEventListener('mousemove', handleMouseMove);
+    container!.addEventListener('mouseleave', handleMouseLeave);
 
     let isVisible = true;
     const intersectionObserver = new IntersectionObserver(
@@ -192,9 +192,9 @@ export default function Threads({
       cancelAnimationFrame(animationFrameId.current);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
+      container!.removeEventListener('mousemove', handleMouseMove);
+      container!.removeEventListener('mouseleave', handleMouseLeave);
+      if (container!.contains(gl.canvas)) container!.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);

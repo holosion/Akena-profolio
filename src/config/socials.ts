@@ -4,7 +4,7 @@
  */
 export const socials = {
   githubProfile: 'https://github.com/holosion',
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/in/akena-jonathan-425866361/',
   x: 'https://x.com/AkenaJonat2240',
   email: 'akenajonathan24@gmail.com',
   instagram: 'https://instagram.com/holo.sion',

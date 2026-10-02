@@ -34,7 +34,11 @@ export default function TechStack() {
             {!reduced ? (
               <VisibilityMount className="stack-visual__fx">
                 <Suspense fallback={null}>
-                  <Ballpit count={16} followCursor />
+                  <Ballpit
+                    count={26}
+                    followCursor
+                    colors={['#ec4899', '#8b5cf6', '#06b6d4', '#f59e0b', '#84cc16', '#f43f5e']}
+                  />
                 </Suspense>
               </VisibilityMount>
             ) : (

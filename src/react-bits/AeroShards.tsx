@@ -1,3 +1,4 @@
+// @ts-nocheck — Unused legacy component retained for reference; not imported by any section.
 import { useEffect, useRef } from 'react';
 import './AeroShards.css';
 

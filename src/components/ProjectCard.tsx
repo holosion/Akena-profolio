@@ -6,11 +6,23 @@ type Props = {
   onOpen: (project: Project) => void;
 };
 
+const projectImageMap: Record<string, string> = {
+  lumora: '/projects/smart-lpg.jpg',
+  iles: '/projects/internship-eval.jpg',
+  events: '/projects/event-booking.jpg',
+};
+
 export default function ProjectCard({ project, onOpen }: Props) {
+  const imageSrc = projectImageMap[project.image];
+
   return (
     <article className={`project-card ${project.featured ? 'project-card--featured' : ''}`}>
-      <div className={`project-visual project-visual--${project.image}`} aria-hidden="true">
-        <span />
+      <div className={`project-visual project-visual--${project.image}`}>
+        {imageSrc ? (
+          <img src={imageSrc} alt={project.title} loading="lazy" />
+        ) : (
+          <span aria-hidden="true" />
+        )}
       </div>
       <div className="project-card__body">
         <p className="kicker">{project.category}</p>

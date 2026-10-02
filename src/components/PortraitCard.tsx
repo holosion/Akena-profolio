@@ -8,7 +8,7 @@ export default function PortraitCard() {
         <span className="id-card__chip id-card__chip--live">ACTIVE</span>
       </div>
       <div className="id-card__photo">
-        <img src={profile.photo.src} alt={profile.photo.alt} width={280} height={360} />
+        <img src={profile.photo.src} alt={profile.photo.alt} width={360} height={460} />
       </div>
       <div className="id-card__body">
         <p className="id-card__name">{profile.name}</p>

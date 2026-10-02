@@ -15,7 +15,7 @@ export default function AIMLSection() {
         {!reduced ? (
           <VisibilityMount className="galaxy-bg__fx">
             <Suspense fallback={null}>
-              <Galaxy density={1.1} hueShift={175} saturation={0.4} />
+              <Galaxy density={1.6} hueShift={210} saturation={0.72} />
             </Suspense>
           </VisibilityMount>
         ) : null}

@@ -1,6 +1,11 @@
 import { BriefcaseBusiness, GitBranch, Mail } from 'lucide-react';
+import { lazy, Suspense } from 'react';
 import { socials } from '../config/socials';
 import SectionHeader from '../components/SectionHeader';
+import VisibilityMount from '../components/VisibilityMount';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+
+const Threads = lazy(() => import('../react-bits/Threads'));
 
 const InstagramIcon = ({ size = 18 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -11,8 +16,25 @@ const InstagramIcon = ({ size = 18 }: { size?: number }) => (
 );
 
 export default function Contact() {
+  const reduced = usePrefersReducedMotion();
+
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section section--contact">
+      <div className="contact-bg" aria-hidden="true">
+        {!reduced ? (
+          <VisibilityMount className="contact-bg__fx">
+            <Suspense fallback={null}>
+              <Threads
+                color={[0.96, 0.62, 0.04]}
+                amplitude={1.4}
+                distance={0.28}
+                enableMouseInteraction
+              />
+            </Suspense>
+          </VisibilityMount>
+        ) : null}
+      </div>
+      <div className="section__accent section__accent--gold" aria-hidden="true" />
       <div className="container contact">
         <SectionHeader kicker="07 — Signal" title="Let's build intelligent systems." />
         <p className="lede">

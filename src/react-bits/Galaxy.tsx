@@ -170,7 +170,7 @@ export default function Galaxy({
     let program: Program;
     function resize() {
       const scale = Math.min(window.devicePixelRatio || 1, 1.25);
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
+      renderer.setSize(ctn!.offsetWidth * scale, ctn!.offsetHeight * scale);
       if (program) {
         program.uniforms.uResolution.value = new Color(
           gl.canvas.width,
@@ -213,7 +213,7 @@ export default function Galaxy({
     const io = new IntersectionObserver((entries) => {
       isVisible = entries[0]?.isIntersecting ?? false;
     });
-    io.observe(ctn);
+    io.observe(ctn!);
 
     function update(t: number) {
       animateId = requestAnimationFrame(update);
@@ -230,10 +230,10 @@ export default function Galaxy({
       renderer.render({ scene: mesh });
     }
     animateId = requestAnimationFrame(update);
-    ctn.appendChild(gl.canvas);
+    ctn!.appendChild(gl.canvas);
 
     function handleMouseMove(e: MouseEvent) {
-      const rect = ctn.getBoundingClientRect();
+      const rect = ctn!.getBoundingClientRect();
       targetMousePos.current = {
         x: (e.clientX - rect.left) / rect.width,
         y: 1.0 - (e.clientY - rect.top) / rect.height,

@@ -43,13 +43,13 @@ export default function Ballpit({
 
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      canvas.width = parent.clientWidth * dpr;
-      canvas.height = parent.clientHeight * dpr;
-      canvas.style.width = `${parent.clientWidth}px`;
-      canvas.style.height = `${parent.clientHeight}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const w = parent.clientWidth;
-      const h = parent.clientHeight;
+      canvas!.width = parent!.clientWidth * dpr;
+      canvas!.height = parent!.clientHeight * dpr;
+      canvas!.style.width = `${parent!.clientWidth}px`;
+      canvas!.style.height = `${parent!.clientHeight}px`;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const w = parent!.clientWidth;
+      const h = parent!.clientHeight;
       balls = Array.from({ length: count }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -63,9 +63,9 @@ export default function Ballpit({
     function step() {
       raf = requestAnimationFrame(step);
       if (!visible || document.hidden) return;
-      const w = parent.clientWidth;
-      const h = parent.clientHeight;
-      ctx.clearRect(0, 0, w, h);
+      const w = parent!.clientWidth;
+      const h = parent!.clientHeight;
+      ctx!.clearRect(0, 0, w, h);
       for (const b of balls) {
         if (!reduce) {
           b.vy += 0.12;
@@ -96,15 +96,15 @@ export default function Ballpit({
             b.vx *= 0.98;
           }
         }
-        const g = ctx.createRadialGradient(b.x - b.r * 0.3, b.y - b.r * 0.35, 2, b.x, b.y, b.r);
+        const g = ctx!.createRadialGradient(b.x - b.r * 0.3, b.y - b.r * 0.35, 2, b.x, b.y, b.r);
         g.addColorStop(0, '#e8fff8');
         g.addColorStop(0.45, b.color);
         g.addColorStop(1, '#0b1c22');
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = g;
-        ctx.globalAlpha = 0.9;
-        ctx.fill();
+        ctx!.beginPath();
+        ctx!.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx!.fillStyle = g;
+        ctx!.globalAlpha = 0.9;
+        ctx!.fill();
       }
     }
 
@@ -116,7 +116,7 @@ export default function Ballpit({
     });
     io.observe(parent);
     function onMove(e: PointerEvent) {
-      const r = parent.getBoundingClientRect();
+      const r = parent!.getBoundingClientRect();
       pointer.x = e.clientX - r.left;
       pointer.y = e.clientY - r.top;
       pointer.active = true;
@@ -124,16 +124,16 @@ export default function Ballpit({
     function onLeave() {
       pointer.active = false;
     }
-    parent.addEventListener('pointermove', onMove);
-    parent.addEventListener('pointerleave', onLeave);
+    parent!.addEventListener('pointermove', onMove);
+    parent!.addEventListener('pointerleave', onLeave);
     raf = requestAnimationFrame(step);
 
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
-      parent.removeEventListener('pointermove', onMove);
-      parent.removeEventListener('pointerleave', onLeave);
+      parent!.removeEventListener('pointermove', onMove);
+      parent!.removeEventListener('pointerleave', onLeave);
     };
   }, [colors, count, followCursor]);
 

@@ -4,7 +4,7 @@ import VisibilityMount from '../components/VisibilityMount';
 import { engineeringDomains } from '../data/engineering';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
-const AeroShards = lazy(() => import('../react-bits/AeroShards'));
+const Ballpit = lazy(() => import('../react-bits/Ballpit'));
 
 export default function EngineeringFocus() {
   const reduced = usePrefersReducedMotion();
@@ -15,11 +15,16 @@ export default function EngineeringFocus() {
         {!reduced ? (
           <VisibilityMount className="engineer-bg__fx">
             <Suspense fallback={null}>
-              <AeroShards />
+              <Ballpit
+                count={24}
+                followCursor
+                colors={['#ec4899', '#8b5cf6', '#06b6d4', '#f59e0b', '#84cc16']}
+              />
             </Suspense>
           </VisibilityMount>
         ) : null}
       </div>
+      <div className="section__accent section__accent--cyan" aria-hidden="true" />
       <div className="container">
         <SectionHeader
           kicker="02 — Domains"

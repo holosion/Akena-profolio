@@ -16,10 +16,12 @@ export default function Hero() {
       <div className="hero__bg" aria-hidden="true">
         {!reduced ? (
           <Suspense fallback={null}>
-            <Threads amplitude={1.15} distance={0.25} enableMouseInteraction />
+            <Threads color={[0.92, 0.28, 0.6]} amplitude={1.6} distance={0.32} enableMouseInteraction />
           </Suspense>
         ) : null}
       </div>
+      <div className="hero__accent hero__accent--left" aria-hidden="true" />
+      <div className="hero__accent hero__accent--right" aria-hidden="true" />
       <div className="hero__grid" />
       <div className="container hero__layout">
         <div className="hero__copy">
