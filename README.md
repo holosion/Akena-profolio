@@ -1,40 +1,52 @@
-# AKENA Portfolio
+# AKENA — a spatial engineering portfolio
 
-Personal site for **AKENA** — Embedded Systems Engineer | AI & Machine Learning Engineer, CEO of Holosion Industries.
+A colorful, responsive portfolio for Akena Jonathan, focused on AI, machine learning, embedded engineering, and connected software.
 
-## Run locally
+## Local preview
 
-```bash
-cd portfolio-app
-npm install
-npm run dev
+```powershell
+npm.cmd install
+npm.cmd run dev
 ```
 
-Then open the URL Vite prints (usually `http://localhost:5173`).
+Open the URL Vite prints (normally http://localhost:5173). Changes update automatically.
 
-## Where to edit content
+## Design and interaction
 
-| What | File |
+- Real Three.js sculpture with metallic materials, studio reflections, orbiting rings, and pointer response.
+- A sticky, three-chapter scroll experience moves between intelligence, a processor board, and a connected network.
+- Violet, cyan, pink, and amber backgrounds, original project artwork, perspective card interactions, and scroll reveals.
+- Mobile navigation, visible keyboard focus, skip link, and a reduced-motion layout that exposes all chapters without animation.
+- Three.js is loaded separately from the main application. Scenes load near the viewport and pause outside it or while the tab is hidden. A generated image remains available when WebGL cannot start.
+- Fonts and artwork are served locally; there are no external font or image requests.
+
+## Content locations
+
+| Content | File |
 | --- | --- |
-| Name, bio, photo path, SEO | `src/data/profile.ts` |
-| Photo file | `src/assets/portrait.jpg` |
-| GitHub / email / LinkedIn / X | `src/config/socials.ts` |
-| Project GitHub + demo URLs | `src/config/socials.ts` (`projectLinks`) |
-| Project copy, features, details | `src/data/projects.ts` |
-| Engineering domains | `src/data/engineering.ts` |
-| Tech stack | `src/data/tech.ts` |
-| AI/ML knowledge map | `src/data/aiml.ts` |
-| Journey timeline | `src/data/timeline.ts` |
+| Page copy and project summaries | `src/App.tsx` |
+| Scroll chapters | `src/components/ScrollJourney.tsx` |
+| 3D geometry, lighting, and camera | `src/components/SpatialScene.tsx` |
+| Colors, layouts, and animation | `src/experience.css` |
+| Social profiles, email, project links | `src/config/socials.ts` |
+| Technology groups | `src/data/tech.ts` |
+| Portrait and profile data | `src/data/profile.ts` |
+| Original project artwork | `public/images/` |
+| Artwork prompts and provenance | `docs/artwork.md` |
 
-## React Bits
+Instagram links point to **@holosion**. Project covers are explicitly labeled as concept visuals; they do not represent actual product photos or app screenshots.
 
-Backgrounds live in `src/react-bits/` (Threads, Galaxy, Aero Shards, Ballpit). Swap in official CLI copies later if you want the exact upstream shaders.
+## Validation
 
-Future 3D slots:
+```powershell
+npm.cmd run build
+npm.cmd run lint
+npx.cmd playwright install chromium
+npm.cmd test
+```
 
-- `src/components/Hero3D.tsx`
-- `src/components/InteractiveSystem.tsx`
+Browser checks cover real WebGL initialization, scrolling through all chapters, project image loading, Instagram links, mobile navigation, horizontal overflow, and reduced-motion behavior. Screenshots are saved to the ignored `test-results/` folder.
 
-## Deploy
+## Deployment
 
-Build with `npm run build`, then host `dist/` on Vercel, Netlify, or GitHub Pages. For Vercel: import the `portfolio-app` folder as the project root.
+Build with `npm.cmd run build` and publish `dist/` with Vercel, Netlify, or another static host. Use `portfolio-app` as the project root. No backend or API keys are required.

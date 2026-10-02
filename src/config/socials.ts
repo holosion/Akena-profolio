@@ -7,7 +7,7 @@ export const socials = {
   linkedin: 'https://www.linkedin.com/in/akena-jonathan-425866361/',
   x: 'https://x.com/AkenaJonat2240',
   email: 'akenajonathan24@gmail.com',
-  instagram: 'https://instagram.com/holo.sion',
+  instagram: 'https://www.instagram.com/holosion/',
 } as const;
 
 export const projectLinks = {
