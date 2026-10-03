@@ -6,12 +6,12 @@ import { newDb } from 'pg-mem';
 import { createApp } from './app.js';
 
 const token = 'test-token-with-at-least-32-characters';
-async function setup() {
+async function setup(options = {}) {
   const memory = newDb();
   memory.public.none(await readFile(new URL('./schema.sql', import.meta.url), 'utf8'));
   const { Pool } = memory.adapters.createPg();
   const db = new Pool();
-  return { db, app: createApp({ db, adminToken: token, publicOrigin: 'https://portfolio.example' }) };
+  return { db, app: createApp({ db, adminToken: token, publicOrigin: 'https://portfolio.example', ...options }) };
 }
 test('contact submission persists and can be tracked only by an authenticated admin', async () => {
   const { app, db } = await setup();
@@ -28,6 +28,20 @@ test('contact submission persists and can be tracked only by an authenticated ad
   await request(app).patch(`/api/admin/contacts/${contact.id}`).set('Authorization', `Bearer ${token}`).send({ status: 'invalid' }).expect(400);
   await request(app).get('/api/admin/contacts?page=2').set('Authorization', `Bearer ${token}`).expect(200).expect(res => assert.equal(res.body.contacts.length, 0));
 });
+test('saved contacts trigger notifications, spam does not, and failed email does not lose messages', async () => {
+  const notifications = [];
+  const { app, db } = await setup({ notifyContact: async contact => { notifications.push(contact); throw Object.assign(new Error('secret provider response'), { code: 'EMAIL_HTTP_503' }); } });
+  const valid = { name: 'Visitor', email: 'PERSON@example.com', subject: 'Hello', message: 'Please contact me' };
+  await request(app).post('/api/contacts').send({ ...valid, website: 'bot.example' }).expect(201);
+  await request(app).post('/api/contacts').send({ ...valid, email: 'invalid' }).expect(400);
+  assert.equal(notifications.length, 0);
+  await request(app).post('/api/contacts').send(valid).expect(201).expect({ success: true });
+  const saved = (await db.query('SELECT * FROM contacts')).rows[0];
+  assert.equal(notifications.length, 1);
+  assert.equal(notifications[0].id, saved.id);
+  assert.equal(notifications[0].email, 'person@example.com');
+});
+
 test('invalid, cross-origin and honeypot submissions do not reach the database', async () => {
   const { app, db } = await setup();
   const valid = { name: 'Visitor', email: 'visitor@example.com', subject: 'Hello', message: 'Hello there' };

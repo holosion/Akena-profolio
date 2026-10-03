@@ -4,7 +4,7 @@ import { rateLimit } from 'express-rate-limit';
 import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
 import path from 'node:path';
 
-export function createApp({ db, adminToken, publicOrigin, trustProxy = false, staticDir }) {
+export function createApp({ db, adminToken, publicOrigin, trustProxy = false, staticDir, notifyContact }) {
   if (!adminToken || adminToken.length < 32) throw new Error('ADMIN_TOKEN must contain at least 32 characters.');
   const app = express();
   app.disable('x-powered-by');
@@ -47,7 +47,12 @@ export function createApp({ db, adminToken, publicOrigin, trustProxy = false, st
       fields[key] = body[key].trim();
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return res.status(400).json({ error: 'Please enter a valid email address.' });
-    await db.query('INSERT INTO contacts (id, name, email, subject, message) VALUES ($1, $2, $3, $4, $5)', [randomUUID(), fields.name, fields.email.toLowerCase(), fields.subject, fields.message]);
+    const contact = { id: randomUUID(), ...fields, email: fields.email.toLowerCase() };
+    await db.query('INSERT INTO contacts (id, name, email, subject, message) VALUES ($1, $2, $3, $4, $5)', [contact.id, contact.name, contact.email, contact.subject, contact.message]);
+    if (notifyContact) {
+      try { await notifyContact(contact); }
+      catch (error) { console.error('Contact notification failed:', contact.id, error.code || error.name); }
+    }
     res.status(201).json({ success: true });
   });
   app.use('/api/admin', limit(60), authenticate);

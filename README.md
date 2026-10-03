@@ -49,7 +49,15 @@ Browser checks cover real WebGL initialization, scrolling through all chapters, 
 
 ## Deployment
 
-The production stack is **Vercel frontend → Render Express API → Neon PostgreSQL**. PostgreSQL stores contact name, email, subject, message, submission time, and status. Email/social links still open their respective apps; only form submissions are recorded. No email notifications are sent.
+The production stack is **Vercel frontend → Render Express API → Neon PostgreSQL**. PostgreSQL stores contact name, email, subject, message, submission time, and status. Email/social links still open their respective apps; only form submissions are recorded. Contact notifications are sent through Resend when configured on Render.
+
+### Gmail notifications
+
+Set `RESEND_API_KEY`, `NOTIFICATION_EMAIL`, `NOTIFICATION_FROM`, and `NOTIFICATION_INBOX_URL` on Render only. Never place the API key in Vercel or a `VITE_` variable. The notification includes the contact details and full message as plain text, and Reply goes to the visitor's email address.
+
+The default sender is `AKENA Portfolio <onboarding@resend.dev>`. Resend permits this sender only when the recipient is the email address of the Resend account. For other recipients or a custom sender, verify a domain in Resend first.
+
+Messages are saved before sending. Temporary email failures are retried twice with an idempotency key to prevent duplicate notifications. If delivery still fails, the contact remains in the admin inbox and Render logs the contact reference; there is no background retry queue. An empty API key disables notifications for local development.
 
 ### 1. Neon database
 
