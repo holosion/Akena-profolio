@@ -40,7 +40,7 @@ test("desktop loads real 3D and changes chapters while scrolling", async ({
       .poll(() => art.evaluate((img) => (img as HTMLImageElement).naturalWidth))
       .toBeGreaterThan(0);
   }
-  await expect(page.locator(".work-card")).toHaveCount(3);
+  await expect(page.locator(".work-card")).toHaveCount(4);
   await page.locator("#work").scrollIntoViewIfNeeded();
   await page.waitForTimeout(900);
   await page.screenshot({ path: "test-results/desktop-work.png" });

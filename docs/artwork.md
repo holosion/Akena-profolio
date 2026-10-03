@@ -1,15 +1,21 @@
 # Original portfolio artwork
 
-Generated on 3 October 2026 with the built-in image generation tool. The images are conceptual portfolio artwork, not photographs of Akena's actual hardware or screenshots of the deployed applications. Project covers are labeled **CONCEPT VISUAL** in the site.
+The original four images were generated on 3 October 2026 with the built-in image generation tool. The Super Mario cover was supplied by the user. These images are conceptual portfolio artwork, not photographs of Akena's actual hardware or screenshots of the deployed applications. Project covers are labeled **CONCEPT VISUAL** in the site.
 
 The original generated PNGs remain in the Codex generated-images directory. The project stores WebP copies for efficient delivery; no creative image edits were performed during conversion.
 
 ## Saved files
 
+- `public/images/super-mario-ai.jpg` — user-supplied Super Mario AI concept illustration, copied unchanged from `Downloads/Gemini_Generated_Image_7jgn717jgn717jgn.jpg` on 3 October 2026. The illustrated generation and reward numbers are decorative artwork, not verified training metrics.
+
 - `public/images/intelligence-core.webp` — hero, feature banner, and WebGL fallback.
 - `public/images/lumora-hardware.webp` — embedded engineering project cover.
 - `public/images/iles-workspace.webp` — internship evaluation project cover.
 - `public/images/events-experience.webp` — event booking project cover.
+
+## Super Mario project source
+
+Project copy is grounded in [holosion/super_mario](https://github.com/holosion/super_mario), specifically `trainmario.py` and `evaluatemario.py`, reviewed on 3 October 2026. These implement PPO, frame stacking, curriculum configuration, checkpoints, evaluation, and TensorBoard logging. The user confirmed training remains in progress. No level completion, win rate, or training-generation results are claimed by the portfolio.
 
 ## Final generation prompts
 

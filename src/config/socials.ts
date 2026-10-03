@@ -11,6 +11,9 @@ export const socials = {
 } as const;
 
 export const projectLinks = {
+  mario: {
+    github: 'https://github.com/holosion/super_mario',
+  },
   iles: {
     github: 'https://github.com/holosion/FINAL_ILES',
     demo: 'https://final-iles.vercel.app/',

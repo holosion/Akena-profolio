@@ -19,7 +19,27 @@ import ScrollJourney from "./components/ScrollJourney";
 import BrandIcon from "./components/BrandIcon";
 import ContactForm from "./components/ContactForm";
 
-const works = [
+type PortfolioWork = {
+  id: string; name: string; subtitle: string; category: string; description: string;
+  tags: string[]; features: string[]; links: { github: string; demo?: string };
+  image: string; alt: string; color: string; status?: string;
+};
+
+const works: PortfolioWork[] = [
+  {
+    id: "mario",
+    name: "Super Mario AI",
+    subtitle: "Learning to play, one experience at a time.",
+    category: "ARTIFICIAL INTELLIGENCE · REINFORCEMENT LEARNING",
+    description: "An ongoing reinforcement learning project training a PPO agent to play Super Mario Bros. Exploring how an agent learns from gameplay, rewards, and repeated experience, with training and evaluation still in progress.",
+    tags: ["Python", "PPO", "Stable-Baselines3", "Gymnasium"],
+    features: ["PPO training with stacked gameplay frames", "Curriculum from a single level toward the full game", "Model checkpoints, evaluation, and TensorBoard logging"],
+    links: projectLinks.mario,
+    image: "/images/super-mario-ai.jpg",
+    alt: "Concept illustration of Mario surrounded by neural networks and AI training displays",
+    color: "cyan",
+    status: "Training in progress",
+  },
   {
     id: "lumora",
     name: "Lumora",
@@ -315,10 +335,10 @@ export default function App() {
               >
                 <a
                   className="project-art"
-                  href={work.links.demo}
+                  href={work.links.demo || work.links.github}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`Open ${work.name} live project`}
+                  aria-label={`Open ${work.name} ${work.links.demo ? 'live project' : 'repository'}`}
                 >
                   <img src={work.image} alt={work.alt} loading="lazy" />
                   <span className="art-index">PROJECT / 0{index + 1}</span>
@@ -329,6 +349,7 @@ export default function App() {
                 </a>
                 <div className="project-copy">
                   <span className="eyebrow">{work.category}</span>
+                  {work.status && <span className="project-status"><span className="status-dot" />{work.status}</span>}
                   <h3>{work.name}</h3>
                   <p className="project-subtitle">{work.subtitle}</p>
                   <p>{work.description}</p>
@@ -343,9 +364,9 @@ export default function App() {
                     ))}
                   </div>
                   <div className="project-links">
-                    <a href={work.links.demo} target="_blank" rel="noreferrer">
+                    {work.links.demo && <a href={work.links.demo} target="_blank" rel="noreferrer">
                       View live project <ArrowUpRight size={17} />
-                    </a>
+                    </a>}
                     <a
                       href={work.links.github}
                       target="_blank"

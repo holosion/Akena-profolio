@@ -1755,3 +1755,4 @@ footer > a:last-child {
 .inbox-pages { display: flex; gap: 16px; }
 .inbox button { cursor: pointer; padding: 12px 20px; }
 @media (max-width: 600px) { .contact-fields { grid-template-columns: 1fr; } }
+.project-status { display: flex; align-items: center; gap: 9px; width: fit-content; margin-top: 14px; padding: 8px 12px; border: 1px solid #578f94; border-radius: 999px; color: #b4f4ed; background: #163136; font-size: 13px; }
