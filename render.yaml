@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: akena-portfolio
+    name: akena-portfolio-api
     runtime: node
     plan: 0.5c-512mb
-    buildCommand: npm ci --include=dev && npm run build
+    buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
@@ -12,19 +12,12 @@ services:
       - key: NODE_VERSION
         value: 24
       - key: DATABASE_URL
-        fromDatabase:
-          name: akena-contacts
-          property: connectionString
+        sync: false
+      - key: SERVE_FRONTEND
+        value: "false"
       - key: ADMIN_TOKEN
         generateValue: true
       - key: TRUST_PROXY_HOPS
         value: 1
       - key: PUBLIC_ORIGIN
         sync: false
-databases:
-  - name: akena-contacts
-    plan: 0.1c-256mb
-    postgresMajorVersion: "17"
-    ipAllowList: []
-    databaseName: portfolio
-    user: portfolio

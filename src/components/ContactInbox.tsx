@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { apiUrl } from '../config/api';
 type Contact = { id: string; name: string; email: string; subject: string; message: string; status: string; created_at: string };
 export default function ContactInbox() {
   const [token, setToken] = useState('');
@@ -8,7 +9,7 @@ export default function ContactInbox() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   async function request(url: string, options: RequestInit = {}) {
-    const res = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
+    const res = await fetch(apiUrl(url), { ...options, signal: AbortSignal.timeout(30000), headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Request failed.');
     return data;

@@ -10,6 +10,19 @@ export function createApp({ db, adminToken, publicOrigin, trustProxy = false, st
   app.disable('x-powered-by');
   app.set('trust proxy', trustProxy);
   app.use(helmet({ contentSecurityPolicy: { directives: { 'img-src': ["'self'", 'data:', 'blob:'], 'worker-src': ["'self'", 'blob:'] } } }));
+  const origins = new Set((publicOrigin || '').split(',').map(origin => origin.trim()).filter(Boolean));
+  app.use('/api', (req, res, next) => {
+    res.vary('Origin');
+    const origin = req.get('origin');
+    if (origin) {
+      if (!origins.has(origin)) return res.status(403).json({ error: 'Origin not allowed.' });
+      res.set('Access-Control-Allow-Origin', origin);
+      res.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+      res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
+    next();
+  });
   app.use(express.json({ limit: '16kb' }));
   app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   const limit = (max) => rateLimit({ windowMs: 15 * 60 * 1000, limit: max, standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many requests. Please try again later.' } });
@@ -25,7 +38,6 @@ export function createApp({ db, adminToken, publicOrigin, trustProxy = false, st
     res.json({ status: 'ok' });
   });
   app.post('/api/contacts', limit(5), async (req, res) => {
-    if (publicOrigin && req.get('origin') && req.get('origin') !== publicOrigin) return res.status(403).json({ error: 'Origin not allowed.' });
     const body = req.body;
     if (!body || typeof body !== 'object') return res.status(400).json({ error: 'Please provide your contact details.' });
     if (typeof body.website === 'string' && body.website) return res.status(201).json({ success: true });

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { apiUrl } from '../config/api';
 
 export default function ContactForm() {
   const [busy, setBusy] = useState(false);
@@ -10,7 +11,7 @@ export default function ContactForm() {
     const form = event.currentTarget;
     setBusy(true); setNotice(''); setFailed(false);
     try {
-      const response = await fetch('/api/contacts', { method: 'POST', signal: AbortSignal.timeout(15000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      const response = await fetch(apiUrl('/api/contacts'), { method: 'POST', signal: AbortSignal.timeout(30000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Unable to send your message.');
       form.reset(); setNotice('Thanks! Your message has been received.');

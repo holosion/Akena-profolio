@@ -49,19 +49,50 @@ Browser checks cover real WebGL initialization, scrolling through all chapters, 
 
 ## Deployment
 
-The Node/Express server serves the built React frontend and API together. PostgreSQL stores contact name, email, subject, message, submission time, and status. Email/social links still open their respective apps; only form submissions are recorded. No email notifications are sent.
+The production stack is **Vercel frontend → Render Express API → Neon PostgreSQL**. PostgreSQL stores contact name, email, subject, message, submission time, and status. Email/social links still open their respective apps; only form submissions are recorded. No email notifications are sent.
 
-### Render
+### 1. Neon database
+
+Create a Neon project and database, then copy the pooled PostgreSQL connection string from **Connect**. Preserve its TLS query parameters (including `sslmode=require`). Store it only as `DATABASE_URL` on Render. The server uses `pg.Pool` and creates the contact table/index automatically on startup. Choose Neon and Render regions close to each other.
+
+See [Neon's connection guide](https://neon.com/docs/connect/connect-from-any-app). No database password belongs in Vercel or a `VITE_` variable.
+
+### 2. Render backend
 
 1. Push this project to your GitHub repository. The existing Git root is `portfolio-app`, so `render.yaml` belongs at the repository root.
 2. In Render, choose **New → Blueprint**, connect the repository, and use `render.yaml`.
-3. Set `PUBLIC_ORIGIN` to the exact public site origin, such as `https://akena-portfolio.onrender.com`, without a trailing slash. Update it if you attach a custom domain. If left unset, the server uses Render's `RENDER_EXTERNAL_URL`.
-4. Review Render's charges before creating resources: the Blueprint selects paid web and PostgreSQL plans. Render supplies `DATABASE_URL` and generates `ADMIN_TOKEN`. The contact table is created automatically on startup, idempotently.
-5. After deployment, check `/api/health`, send a test contact, then open `/admin`. Copy `ADMIN_TOKEN` from the web service's Render environment settings into the inbox login. It is a secret: never put it in frontend environment variables or commit it. The inbox holds it in memory only; reload or **Lock inbox** clears it. Rotate it in Render to revoke access.
+3. Set `DATABASE_URL` to the Neon pooled connection string. Set `PUBLIC_ORIGIN` to your exact Vercel frontend origin, such as `https://akena-portfolio.vercel.app`, without a trailing slash. You can allow additional custom domains or specific preview URLs with a comma-separated list. Unlisted browser origins are rejected; previews are not automatically trusted.
+4. The Blueprint creates only a paid Render web service, generates `ADMIN_TOKEN`, and sets `SERVE_FRONTEND=false` and `TRUST_PROXY_HOPS=1`. It does not provision a Render database. Review the selected plan before creating it.
+5. Render runs `npm ci --omit=dev` and `npm start`. For a manual Web Service setup, use those commands, Node 24, and the same environment variables. Leave `PORT` managed by Render. After deployment, open `https://YOUR-API.onrender.com/api/health` and verify `{"status":"ok"}`.
 
-The Blueprint restricts the database to internal connections. Configure database backups/retention in Render and test restoring them. Keep one web instance with the current in-memory rate limiter; use a shared rate-limit store before scaling to multiple instances. `TRUST_PROXY_HOPS=1` is intended for Render's reverse proxy; review it if adding another proxy.
+Configure database backups/retention in Neon and test restoring them. Keep one Render web instance with the current in-memory rate limiter; use a shared rate-limit store before scaling to multiple instances. `TRUST_PROXY_HOPS=1` is intended for Render's reverse proxy; review it if adding another proxy.
 
 See [Render's Blueprint reference](https://render.com/docs/blueprint-spec) for provisioning settings. This repository is prepared for deployment; no resources have been created or published by this change.
+
+### 3. Vercel frontend
+
+Import the same GitHub repository into Vercel. The Git repository root is already `portfolio-app`, so leave **Root Directory** at the repository root. Choose **Vite**, build command `npm run build`, output directory `dist`.
+
+Set the public environment variable `VITE_API_URL=https://YOUR-API.onrender.com` (no `/api` suffix). Deploy or redeploy after setting it: Vite embeds this value at build time. `vercel.json` preserves direct `/admin` navigation. See [Vercel's Vite guide](https://vercel.com/docs/frameworks/frontend/vite).
+
+Update Render's `PUBLIC_ORIGIN` to the resulting Vercel production URL. If you attach a custom domain, add its exact origin too. Then submit a contact from the deployed frontend and confirm it appears in `/admin`.
+
+### Environment variables by host
+
+| Host | Variable | Value |
+| --- | --- | --- |
+| Render | `DATABASE_URL` | Secret Neon pooled PostgreSQL URL with TLS parameters |
+| Render | `ADMIN_TOKEN` | Secret random token, at least 32 characters; generated by Blueprint |
+| Render | `PUBLIC_ORIGIN` | Exact Vercel/custom-domain origin(s), comma-separated |
+| Render | `SERVE_FRONTEND` | `false` |
+| Render | `TRUST_PROXY_HOPS` | `1` |
+| Render | `NODE_ENV` | `production` |
+| Render | `NODE_VERSION` | `24` |
+| Vercel | `VITE_API_URL` | Public Render origin, no trailing `/api` |
+
+### Contact inbox
+
+Open `https://YOUR-FRONTEND.vercel.app/admin`. Copy `ADMIN_TOKEN` from Render's environment settings into the inbox login. Never commit it or configure it as a frontend environment variable. The inbox holds it in memory only; reload or **Lock inbox** clears it. Rotate it on Render to revoke access. The API requires it even if somebody knows the inbox URL.
 
 ### Local full-stack development
 
@@ -80,4 +111,4 @@ Alternatively, with Docker Desktop running, set `POSTGRES_PASSWORD`, `ADMIN_TOKE
 
 ### Backend verification
 
-`npm.cmd run test:server` exercises SQL persistence, protected access, status updates, validation, honeypot handling, rate limits, and safe error responses using an in-memory PostgreSQL emulator (`pg-mem`). `npm.cmd test` includes browser tests for form success/failure and inbox interactions. A real PostgreSQL smoke test is still needed before production if Docker/PostgreSQL is unavailable locally.
+`npm.cmd run test:server` exercises SQL persistence, protected access, status updates, validation, honeypot handling, rate limits, safe error responses, and cross-origin preflight/access using an in-memory PostgreSQL emulator (`pg-mem`). `npm.cmd test` includes browser tests for form success/failure and inbox interactions. Verify `/api/health` and a complete contact submission against the real Neon database after configuring the hosts.

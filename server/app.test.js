@@ -46,3 +46,11 @@ test('rate limiting and safe errors', async () => {
   assert.ok(!JSON.stringify(response.body).includes('secret'));
   await request(app).get('/api/missing').expect(404);
 });
+
+test('cross-origin frontend can preflight and access the protected inbox', async () => {
+  const { app } = await setup();
+  await request(app).options('/api/admin/contacts').set('Origin', 'https://portfolio.example').set('Access-Control-Request-Method', 'PATCH').set('Access-Control-Request-Headers', 'authorization,content-type').expect(204).expect('Access-Control-Allow-Origin', 'https://portfolio.example').expect('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  await request(app).get('/api/admin/contacts').set('Origin', 'https://portfolio.example').set('Authorization', `Bearer ${token}`).expect(200).expect('Access-Control-Allow-Origin', 'https://portfolio.example');
+  await request(app).options('/api/contacts').set('Origin', 'https://untrusted.vercel.app').expect(403);
+  await request(app).get('/api/admin/contacts').set('Origin', 'https://untrusted.vercel.app').set('Authorization', `Bearer ${token}`).expect(403);
+});
