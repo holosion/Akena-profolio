@@ -1737,3 +1737,21 @@ footer > a:last-child {
     max-width: 600px;
   }
 }
+.contact-form { position: relative; display: grid; gap: 18px; max-width: 760px; margin: 32px 0; text-align: left; }
+.contact-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.contact-form label { display: grid; gap: 8px; font-size: 14px; }
+.contact-form input, .contact-form textarea, .inbox select { width: 100%; border: 1px solid #78718a; border-radius: 12px; background: #171323; color: #fff; padding: 14px; font: inherit; }
+.contact-form textarea { resize: vertical; }
+.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: 2px solid #9cebe6; outline-offset: 3px; }
+.contact-form button { justify-self: start; cursor: pointer; border: 0; }
+.contact-form button:disabled { opacity: .65; cursor: wait; }
+.contact-form .contact-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.contact-privacy { font-size: 13px; color: #c5bfd1; }
+.inbox { min-height: 100vh; max-width: 1000px; margin: auto; padding-top: 40px; }
+.inbox h1 { font-size: clamp(32px, 7vw, 60px); margin: 24px 0; }
+.inbox-card { padding: 24px; margin: 20px 0; border: 1px solid #78718a; border-radius: 16px; overflow-wrap: anywhere; }
+.inbox-card h2 { font-size: 24px; }
+.inbox-message { white-space: pre-wrap; margin: 20px 0; }
+.inbox-pages { display: flex; gap: 16px; }
+.inbox button { cursor: pointer; padding: 12px 20px; }
+@media (max-width: 600px) { .contact-fields { grid-template-columns: 1fr; } }

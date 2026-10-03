@@ -17,6 +17,7 @@ import { techStack } from "./data/tech";
 import SpatialScene from "./components/SpatialScene";
 import ScrollJourney from "./components/ScrollJourney";
 import BrandIcon from "./components/BrandIcon";
+import ContactForm from "./components/ContactForm";
 
 const works = [
   {
@@ -559,6 +560,7 @@ export default function App() {
               <MoveUpRight />
             </a>
             <p>Let’s turn a good conversation into something worth building.</p>
+            <ContactForm />
             <div className="contact-bottom">
               <a className="primary-button" href={`mailto:${socials.email}`}>
                 Say hello <ArrowUpRight size={18} />
