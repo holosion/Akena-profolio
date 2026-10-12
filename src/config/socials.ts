@@ -11,6 +11,9 @@ export const socials = {
 } as const;
 
 export const projectLinks = {
+  neonato: {
+    github: 'https://github.com/holosion/neoguard-ai',
+  },
   mario: {
     github: 'https://github.com/holosion/super_mario',
   },

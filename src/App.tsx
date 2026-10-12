@@ -27,6 +27,24 @@ type PortfolioWork = {
 
 const works: PortfolioWork[] = [
   {
+    id: "neonato",
+    name: "Neonato",
+    subtitle: "Small signals. A more connected picture of care.",
+    category: "EMBEDDED SYSTEMS · HEALTH MONITORING · AI",
+    description: "A neonatal health monitoring prototype connecting a patient dashboard with device management, reading synchronization, and alert history. Designed around an ESP32, MAX30102 pulse and oxygen sensing, and DS18B20 temperature sensing, with hardware integration still in development.",
+    tags: ["ESP32", "MAX30102", "DS18B20", "React", "FastAPI", "PostgreSQL"],
+    features: [
+      "Patient sessions, device health, and monitoring trends",
+      "Timestamped readings with support for delayed synchronization",
+      "Experimental risk scoring trained on simulated sessions; no clinical validation",
+    ],
+    links: projectLinks.neonato,
+    image: "/images/neonato-sensors.png",
+    alt: "Concept render of planned Neonato hardware: ESP32 board, MAX30102 optical sensor, DS18B20 temperature probe, clock module, LCD, buzzer, and LED",
+    color: "cyan",
+    status: "Research prototype · Hardware integration pending",
+  },
+  {
     id: "mario",
     name: "Super Mario AI",
     subtitle: "Learning to play, one experience at a time.",
